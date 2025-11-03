@@ -1,0 +1,5 @@
+Test git rev: 44619bbeb259656e8f6bb3a9edf32b12ed636b0c
+throw expression default parameter: PASSED
+throw expression || (throw condition): PASSED
+throw expression || (no throw condition): PASSED
+appends 'src/file-header.txt': PASSED
