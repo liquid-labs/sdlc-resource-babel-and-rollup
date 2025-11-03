@@ -34,6 +34,7 @@ const nodeModulesDir = fsPath.dirname(packageJSONPath)
 const jsInput = process.env.JS_BUILD_TARGET || 'src/index.js' // default
 const sourcemap = true
 let format = process.env.JS_FORMAT || null // TBD via packageJSON
+console.log('---------------\nformat', format, '\n---------------') // DEBUG
 
 const determineOutput = function() {
   const output = []
