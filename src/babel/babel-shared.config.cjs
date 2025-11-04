@@ -4,15 +4,23 @@ const join = require('node:path').join
 const findRoot = require('find-root')
 const semver = require('semver')
 
-const NODE_ENV = process.env.NODE_ENV
-
-const presetEnvOptions = {
-  // in the test environment, we always compile to commonjs
-  modules : NODE_ENV === 'test' ? 'commonjs' : false
-}
-
 const npmRoot = findRoot(process.cwd())
 const pkgJSON = JSON.parse(readFileSync(join(npmRoot, 'package.json'), { encoding : 'utf8' }))
+
+const NODE_ENV = process.env.NODE_ENV
+
+const presetEnvOptions = {}
+if (NODE_ENV !== 'test' || pkgJSON.type === 'module') {
+  // for prod, rollup handles imports so it can do tree shaking and such; this disables Babel transforms
+  presetEnvOptions.modules = false
+  // for explicit es module targets, we need to set the targets to esmodules as well
+  if (pkgJSON.type === 'module') {
+    presetEnvOptions.targets = { esmodules : true }
+  }
+}
+else { // it's a test environment and we are not explicitly targeting es modules
+  Object.assign(presetEnvOptions, { modules : 'commonjs' })
+}
 
 const engineSpec = pkgJSON.engines || {}
 const engineTargets = {}
