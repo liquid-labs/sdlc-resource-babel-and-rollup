@@ -50,5 +50,21 @@ const babelPlugins = [
   'inline-json-import'
 ]
 
+if (process.env.NODE_ENV === 'test') {
+  babelPlugins.push([
+    'module-resolver',
+    {
+      // root: [process.cwd() + '/test-staging/'],
+      alias : {
+        // the examples in the plugin docs are relative paths, the transpiled code was always one '..' too few when we
+        // did it that way, so we use the absolute path
+        _lib : join(process.cwd(), 'test-staging', 'lib'),
+        _cli : join(process.cwd(), 'test-staging', 'cli')
+      },
+      extensions : ['.js', '.jsx', '.es', '.es6', '.mjs', '.cjs']
+    }
+  ])
+}
+
 module.exports.babelPresets = babelPresets
 module.exports.babelPlugins = babelPlugins
